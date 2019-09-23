@@ -51,7 +51,7 @@ cc_binary {
         "-Werror",
         "-Wno-unused-parameter",
     ],
-    shared_libs: ["libbz"],
+    static_libs: ["libbz"],
     srcs: ["bzip2.c"],
     stl: "none",
     symlinks: [
