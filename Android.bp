@@ -53,6 +53,7 @@ cc_library_static {
     recovery_available: true,
     visibility: [
         "//bootable/recovery:__subpackages__",
+        "//bootable/deprecated-ota:__subpackages__",
         "//external/bsdiff:__subpackages__",
         "//external/puffin:__subpackages__",
         "//external/python/cpython3:__subpackages__",
