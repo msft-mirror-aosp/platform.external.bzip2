@@ -96,7 +96,7 @@ cc_binary {
         "-Werror",
         "-Wno-unused-parameter",
     ],
-    static_libs: ["libbz"],
+    static_libs: ["liblibbz2_rs_sys_static"],
     srcs: ["bzip2.c"],
     stl: "none",
     symlinks: [
