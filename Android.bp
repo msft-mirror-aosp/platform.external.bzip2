@@ -58,7 +58,6 @@ cc_library_static {
         "//external/puffin:__subpackages__",
         "//external/python/cpython3:__subpackages__",
         "//system/update_engine:__subpackages__",
-        "//system/core/fs_mgr/libsnapshot:__subpackages__",
         "//vendor:__subpackages__",
     ],
     arch: {
@@ -96,7 +95,7 @@ cc_binary {
         "-Werror",
         "-Wno-unused-parameter",
     ],
-    static_libs: ["libbz"],
+    static_libs: ["liblibbz2_rs_sys_static"],
     srcs: ["bzip2.c"],
     stl: "none",
     symlinks: [
