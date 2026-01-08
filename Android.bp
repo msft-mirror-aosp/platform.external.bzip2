@@ -68,23 +68,35 @@ cc_library_static {
             instruction_set: "arm",
         },
     },
-    cflags: [
-        "-O3",
-        "-DUSE_MMAP",
-        "-Werror",
-        "-Wno-unused-parameter",
-    ],
+    cflags: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
+        true: [],
+        false: [
+            "-O3",
+            "-DUSE_MMAP",
+            "-Werror",
+            "-Wno-unused-parameter",
+        ],
+        default: [],
+    }),
     export_include_dirs: ["."],
-    srcs: [
-        "blocksort.c",
-        "bzlib.c",
-        "compress.c",
-        "crctable.c",
-        "decompress.c",
-        "huffman.c",
-        "randtable.c",
-    ],
-    sdk_version: "9",
+    srcs: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
+        true: [],
+        false: [
+            "blocksort.c",
+            "bzlib.c",
+            "compress.c",
+            "crctable.c",
+            "decompress.c",
+            "huffman.c",
+            "randtable.c",
+        ],
+        default: [],
+    }),
+    whole_static_libs: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
+        true: ["liblibbz2_rs_sys_static"],
+        false: [],
+        default: [],
+    }),
     stl: "none",
 }
 
@@ -96,7 +108,7 @@ cc_binary {
         "-Werror",
         "-Wno-unused-parameter",
     ],
-    static_libs: ["liblibbz2_rs_sys_static"],
+    static_libs: ["libbz"],
     srcs: ["bzip2.c"],
     stl: "none",
     symlinks: [
