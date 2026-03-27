@@ -100,18 +100,40 @@ cc_library_static {
 }
 
 cc_binary {
-    name: "bzip2",
+    name: "bzip2_c",
+    stem: "bzip2",
     host_supported: true,
-
+    target: {
+        windows: {
+            enabled: false,
+        },
+    },
     cflags: [
         "-Werror",
         "-Wno-unused-parameter",
     ],
     static_libs: ["libbz"],
     srcs: ["bzip2.c"],
+
+    // Prevents collision with Rust bzip2 when the flag is enabled
+    enabled: select(release_flag("RELEASE_USE_RUST_BZIP2_CLI"), {
+        true: false,
+        default: true,
+    }),
+
     stl: "none",
     symlinks: [
         "bunzip2",
         "bzcat",
     ],
+}
+
+// This binary is defined in the bzip2-cli Rust crate, so we don't need it defined here.
+// The select below can just select the bzip2-rs crate when the flag is enabled.
+phony {
+    name: "bzip2",
+    required: select(release_flag("RELEASE_USE_RUST_BZIP2_CLI"), {
+        true: ["bzip2_rs"],
+        default: ["bzip2_c"],
+    }),
 }
