@@ -46,8 +46,8 @@ license {
     ],
 }
 
-cc_library_static {
-    name: "libbz",
+cc_defaults {
+    name: "libbz_defaults",
     host_supported: true,
     vendor_available: true,
     recovery_available: true,
@@ -67,6 +67,13 @@ cc_library_static {
             instruction_set: "arm",
         },
     },
+    export_include_dirs: ["."],
+    stl: "none",
+}
+
+cc_library_static {
+    name: "libbz",
+    defaults: ["libbz_defaults"],
     cflags: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
         true: [],
         default: [
@@ -76,7 +83,6 @@ cc_library_static {
             "-Wno-unused-parameter",
         ],
     }),
-    export_include_dirs: ["."],
     srcs: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
         true: [],
         default: [
@@ -93,39 +99,19 @@ cc_library_static {
         true: ["liblibbz2_rs_sys_static"],
         default: [],
     }),
-    stl: "none",
 }
 
 cc_library_static {
     // This module is intended for use by legacy Android.mk
     // modules where Rust support is limited.
     name: "libbz_cc",
-    host_supported: true,
-    vendor_available: true,
-    recovery_available: true,
-    visibility: [
-        "//bootable/recovery:__subpackages__",
-        "//bootable/deprecated-ota:__subpackages__",
-        "//external/bsdiff:__subpackages__",
-        "//external/puffin:__subpackages__",
-        "//external/python/cpython3:__subpackages__",
-        "//system/update_engine:__subpackages__",
-        "//vendor:__subpackages__",
-    ],
-    arch: {
-        arm: {
-            // measurements show that the ARM version of ZLib is about x1.17 faster
-            // than the thumb one...
-            instruction_set: "arm",
-        },
-    },
+    defaults: ["libbz_defaults"],
     cflags: [
         "-O3",
         "-DUSE_MMAP",
         "-Werror",
         "-Wno-unused-parameter",
     ],
-    export_include_dirs: ["."],
 
     // Prevents collision with Rust bzip2 when the flag is enabled
     enabled: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
@@ -134,7 +120,7 @@ cc_library_static {
     }),
 
     // Because we're setting enabled above, this overrides the default
-    // beahvior of Soong to not build the Windows target.
+    // behavior of Soong to not build the Windows target.
     target: {
         windows: {
             enabled: false,
@@ -150,7 +136,6 @@ cc_library_static {
         "huffman.c",
         "randtable.c",
     ],
-    stl: "none",
 }
 
 cc_binary {
