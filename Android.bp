@@ -69,18 +69,17 @@ cc_library_static {
     },
     cflags: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
         true: [],
-        false: [
+        default: [
             "-O3",
             "-DUSE_MMAP",
             "-Werror",
             "-Wno-unused-parameter",
         ],
-        default: [],
     }),
     export_include_dirs: ["."],
     srcs: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
         true: [],
-        false: [
+        default: [
             "blocksort.c",
             "bzlib.c",
             "compress.c",
@@ -89,11 +88,9 @@ cc_library_static {
             "huffman.c",
             "randtable.c",
         ],
-        default: [],
     }),
     whole_static_libs: select(release_flag("RELEASE_USE_RUST_BZIP2"), {
         true: ["liblibbz2_rs_sys_static"],
-        false: [],
         default: [],
     }),
     stl: "none",
