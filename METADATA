@@ -8,4 +8,9 @@ third_party {
   version: "bzip2-1.0.8"
   license_type: NOTICE
   last_upgrade_date { year: 2021 month: 12 day: 8 }
+  security: {
+    tag: "android:on_device_usage"
+    tag: "android:privilege_level:privileged"
+    tag: "android:untrusted_input"
+  }
 }
